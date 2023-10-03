@@ -77,7 +77,17 @@ class Commander {
   }
 
   #rackOut(args) {
-    const result = warehouse.deleteSlot(args[0]);
+    const slotNumber = args[0];
+
+    if (Number.isNaN(slotNumber)) {
+      return error.VALIDATION_ERROR;
+    }
+
+    if (+slotNumber < 0) {
+      return error.VALIDATION_ERROR;
+    }
+
+    const result = warehouse.deleteSlot(+slotNumber);
     if (result.error != null) {
       return result.error;
     }
@@ -93,6 +103,7 @@ class Commander {
         !val ? null : `${idx + 1}\t\t${val.toString().replace(/\s/g, "\t\t")}`
       )
       .filter((val) => val !== null);
+
     console.log(["Slot No.\tSKU No.\tExp Date", ...racks].join("\n"));
     return null;
   }
